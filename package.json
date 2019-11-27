@@ -1,6 +1,6 @@
 {
   "name": "startupjs",
-  "version": "0.9.5",
+  "version": "0.10.0-alpha.0",
   "description": "React Native + Web + Node.js full-stack framework",
   "main": "index.js",
   "bin": "./cli.js",
@@ -15,15 +15,15 @@
     ]
   },
   "dependencies": {
-    "@startupjs/app": "^0.9.5",
-    "@startupjs/backend": "^0.9.0",
-    "@startupjs/bundler": "^0.9.0",
-    "@startupjs/cli": "^0.9.5",
-    "@startupjs/init": "^0.9.0",
-    "@startupjs/orm": "^0.9.0",
-    "@startupjs/react-sharedb": "^0.9.5",
-    "@startupjs/server": "^0.9.0",
-    "@startupjs/ui": "^0.9.5"
+    "@startupjs/app": "^0.10.0-alpha.0",
+    "@startupjs/backend": "^0.10.0-alpha.0",
+    "@startupjs/bundler": "^0.10.0-alpha.0",
+    "@startupjs/cli": "^0.10.0-alpha.0",
+    "@startupjs/init": "^0.10.0-alpha.0",
+    "@startupjs/orm": "^0.10.0-alpha.0",
+    "@startupjs/react-sharedb": "^0.10.0-alpha.0",
+    "@startupjs/server": "^0.10.0-alpha.0",
+    "@startupjs/ui": "^0.10.0-alpha.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
