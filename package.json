@@ -22,7 +22,8 @@
     "@startupjs/init": "^0.9.0",
     "@startupjs/orm": "^0.9.0",
     "@startupjs/react-sharedb": "^0.9.5",
-    "@startupjs/server": "^0.9.0"
+    "@startupjs/server": "^0.9.0",
+    "@startupjs/ui": "^0.9.5"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",

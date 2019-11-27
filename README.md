@@ -111,3 +111,5 @@ Open `http://localhost:3000` and you should see your app.
 ### [Routes middleware](https://github.com/dmapper/startupjs/blob/master/packages/routes-middleware)
 
 ### [Server](https://github.com/dmapper/startupjs/blob/master/packages/server)
+
+### [UI](https://github.com/dmapper/startupjs/blob/master/packages/ui)
