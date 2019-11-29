@@ -116,6 +116,7 @@ function RouteComponent ({ route, onError, ...props }) {
         RC(
           ...props
           key=props.match.url
+          params=route.params
         )
     `
   } else {
