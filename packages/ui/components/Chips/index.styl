@@ -7,7 +7,7 @@
   height 4u
   flex-direction row
   align-items center
-  border-width 0
+  border-width 1
   border-style solid
   &-primary
     background-color $UI.colors.primary
@@ -24,12 +24,12 @@
   &-dark
     background-color $UI.colors.dark
     border-color $UI.colors.dark
-  &-error
+  &-attention
     background-color $UI.colors.attention
     border-color $UI.colors.attention
   &-disabled
-    background-color $UI.colors.disabled
-    border-color $UI.colors.disabled
+    background-color $UI.colors.darkLight
+    border-color $UI.colors.darkLight
   &-outline
     background-color transparent
     border-width 1px
@@ -49,15 +49,18 @@
   &-outline&-dark
     .text
       color $UI.colors.dark
-  &-outline&-error
+  &-outline&-attention
     .text
       color $UI.colors.attention
   &-outline&-disabled
     .text
-      color $UI.colors.disabled
+      color $UI.colors.darkLight
 
-  &:hover
+  &:not(.badge)hover
     opacity 0.5
 
 .text
   color $UI.colors.white
+
+.badgeCase
+  position absolute

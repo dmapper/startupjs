@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import './index.styl'
 
 const SIZES = {
+  xs: 8,
   s: 16,
   m: 24,
   l: 32
@@ -20,36 +21,44 @@ const Chips = observer(function ({
   iconLeft = {},
   iconRight = {},
   statusColor,
-  isError = false,
+  verticalPosition = 'top',
+  horizontalPosition = 'right',
+  isBadge = false,
+  isAttention = false,
   isDisabled = false,
   isOutline = false,
   className,
   style,
+  children,
   onChange
 }) {
   const partSize = (SIZES[size] || size) / 2
   const _style = {
     ...style,
     height: SIZES[size] || size,
-    borderRadius: (iconLeft.name || iconRight.name) ? 8 : 32
+    borderRadius: (iconLeft.name || iconRight.name) && !isBadge ? partSize / 2 : 32,
+    position: isBadge ? 'absolute' : 'relative',
+    [verticalPosition]: isBadge ? '-50%' : null,
+    [horizontalPosition]: isBadge ? '-50%' : null
   }
 
   const Wrapper = onChange && !isDisabled ? TouchableOpacity : Div
-  return pug`
-    Div.root
+  const Component = () => {
+    return pug`
       Wrapper.item(
         styleName=[
           color,
           statusColor,
           isOutline && 'outline',
-          isError && 'error',
-          isDisabled && 'disabled'
+          isAttention && 'attention',
+          isDisabled && 'disabled',
+          isBadge && 'badge'
         ]
         className=className
         onPress=onChange
         style=_style
       )
-        if iconLeft.name
+        if iconLeft.name && !isBadge
           FontAwesomeIcon(
             color=isOutline ? 'black' : 'white'
             ...iconLeft
@@ -64,11 +73,11 @@ const Chips = observer(function ({
         Text.text(
           style={
             fontSize: partSize,
-            paddingLeft: partSize + 2,
-            paddingRight: partSize + 2
+            paddingLeft: partSize - (isBadge ? 3 : -2),
+            paddingRight: partSize - (isBadge ? 3 : -2)
           }
         )=title
-        if iconRight.name
+        if iconRight.name && !isBadge
           FontAwesomeIcon(
             color=isOutline ? 'black' : 'white'
             ...iconRight
@@ -80,6 +89,24 @@ const Chips = observer(function ({
               marginRight: partSize - 4
             }
           )
+    `
+  }
+
+  return pug`
+    Div.root
+      if isBadge
+        =children
+        Div.badgeCase(
+          style={
+            [verticalPosition]: 0,
+            [horizontalPosition]: 0,
+            height: SIZES[size],
+            width: SIZES[size]
+          }
+        )
+          Component
+      else
+        Component
   `
 })
 
@@ -89,7 +116,10 @@ Chips.propTypes = {
   size: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(Object.keys(SIZES))]),
   iconLeft: PropTypes.object,
   iconRight: PropTypes.object,
-  isError: PropTypes.bool,
+  verticalPosition: PropTypes.oneOf(['top', 'bottom']),
+  horizontalPosition: PropTypes.oneOf(['right', 'left']),
+  isBadge: PropTypes.bool,
+  isAttention: PropTypes.bool,
   isDisabled: PropTypes.bool,
   isOutline: PropTypes.bool,
   statusColor: PropTypes.oneOf(['success', 'warning', 'dark'])
