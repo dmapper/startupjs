@@ -1,6 +1,8 @@
 import React from 'react'
 import { observer } from 'startupjs'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
+import { Div } from '@startupjs/ui'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import PropTypes from 'prop-types'
 import './index.styl'
 
@@ -10,61 +12,87 @@ const SIZES = {
   l: 32
 }
 
+/* TODO: color icon need fix */
 const Chips = observer(function ({
   title,
-  variant = 'default',
   color = 'primary',
   size = 'm',
   iconLeft = {},
   iconRight = {},
-  isError,
-  isSuccess,
-  isWarning,
-  isDisabled,
+  statusColor,
+  isError = false,
+  isDisabled = false,
+  isOutline = false,
   className,
   style,
-  onPress
+  onChange
 }) {
   const partSize = (SIZES[size] || size) / 2
   const _style = {
     ...style,
     height: SIZES[size] || size,
-    paddingLeft: partSize,
-    paddingRight: partSize
+    borderRadius: (iconLeft.name || iconRight.name) ? 8 : 32
   }
 
-  const Wrapper = onPress ? TouchableOpacity : View
+  const Wrapper = onChange && !isDisabled ? TouchableOpacity : Div
   return pug`
-    View.root
+    Div.root
       Wrapper.item(
-        styleName=color
+        styleName=[
+          color,
+          statusColor,
+          isOutline && 'outline',
+          isError && 'error',
+          isDisabled && 'disabled'
+        ]
         className=className
-        onPress=onPress
+        onPress=onChange
         style=_style
       )
         if iconLeft.name
-          Text iconLeft
+          FontAwesomeIcon(
+            color=isOutline ? 'black' : 'white'
+            ...iconLeft
+            icon=iconLeft.type ? [iconLeft.type, iconLeft.name] : iconLeft.name
+            width=partSize
+            height=partSize
+            style={
+              marginLeft: partSize - 4,
+              marginRight: (-partSize / 2) - 2
+            }
+          )
         Text.text(
-          style={fontSize: partSize }
+          style={
+            fontSize: partSize,
+            paddingLeft: partSize + 2,
+            paddingRight: partSize + 2
+          }
         )=title
         if iconRight.name
-          Text iconRight
+          FontAwesomeIcon(
+            color=isOutline ? 'black' : 'white'
+            ...iconRight
+            icon=iconRight.type ? [iconRight.type, iconRight.name] : iconRight.name
+            width=partSize
+            height=partSize
+            style={
+              marginLeft: (-partSize / 2) - 2,
+              marginRight: partSize - 4
+            }
+          )
   `
 })
 
 Chips.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  color: PropTypes.string,
-  size: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf(Object.keys(SIZES))
-  ]),
+  color: PropTypes.oneOf(['primary', 'secondary']),
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(Object.keys(SIZES))]),
   iconLeft: PropTypes.object,
   iconRight: PropTypes.object,
   isError: PropTypes.bool,
-  isSuccess: PropTypes.bool,
-  isWarning: PropTypes.bool,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  isOutline: PropTypes.bool,
+  statusColor: PropTypes.oneOf(['success', 'warning', 'dark'])
 }
 
 export default Chips

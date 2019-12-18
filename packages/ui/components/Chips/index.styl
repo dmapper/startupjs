@@ -4,11 +4,60 @@
 
 .item
   justify-content center
-  background-color #999
-  padding-left 2u
-  border-radius 4u
-  padding-right 2u
   height 4u
+  flex-direction row
+  align-items center
+  border-width 0
+  border-style solid
+  &-primary
+    background-color $UI.colors.primary
+    border-color $UI.colors.primary
+  &-secondary
+    background-color $UI.colors.secondary
+    border-color $UI.colors.secondary
+  &-success
+    background-color $UI.colors.success
+    border-color $UI.colors.success
+  &-warning
+    background-color $UI.colors.warning
+    border-color $UI.colors.warning
+  &-dark
+    background-color $UI.colors.dark
+    border-color $UI.colors.dark
+  &-error
+    background-color $UI.colors.attention
+    border-color $UI.colors.attention
+  &-disabled
+    background-color $UI.colors.disabled
+    border-color $UI.colors.disabled
+  &-outline
+    background-color transparent
+    border-width 1px
+
+  &-outline&-primary
+    .text
+      color $UI.colors.primary
+  &-outline&-secondary
+    .text
+      color $UI.colors.secondary
+  &-outline&-success
+    .text
+      color $UI.colors.success
+  &-outline&-warning
+    .text
+      color $UI.colors.warning
+  &-outline&-dark
+    .text
+      color $UI.colors.dark
+  &-outline&-error
+    .text
+      color $UI.colors.attention
+  &-outline&-disabled
+    .text
+      color $UI.colors.disabled
+
+  &:hover
+    opacity 0.5
 
 .text
-  color #ffffff
+  color $UI.colors.white
