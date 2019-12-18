@@ -1,8 +1,9 @@
 import React from 'react'
 import { observer } from 'startupjs'
-import { View } from 'react-native'
+import PropTypes from 'prop-types'
+import { Div } from '@startupjs/ui'
 
-export default observer(function Menu ({
+const Menu = observer(({
   activeItem,
   activeItemBackground,
   listArrowIcon,
@@ -10,21 +11,29 @@ export default observer(function Menu ({
   className,
   children,
   onChange
-}) {
-  children = React.Children.toArray(children)
-  children = children.map(item => {
+}) => {
+  children = React.Children.toArray(children).map(item => {
     return React.cloneElement(item, {
-      activeItemBackground,
-      listArrowIcon,
-      activeItem,
-      onChange
+      _activeItemBackground: activeItemBackground,
+      _listArrowIcon: listArrowIcon,
+      _activeItem: activeItem,
+      _onChange: onChange
     })
   })
 
   return pug`
-    View(
+    Div(
       style=style
       className=className
     )=children
   `
 })
+
+Menu.propTypes = {
+  activeItem: PropTypes.string,
+  activeItemBackground: PropTypes.string,
+  listArrowIcon: PropTypes.object,
+  onChange: PropTypes.func
+}
+
+export default Menu
