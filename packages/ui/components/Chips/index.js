@@ -1,8 +1,8 @@
 import React from 'react'
 import { observer } from 'startupjs'
 import { Text, TouchableOpacity } from 'react-native'
-import { Div } from '@startupjs/ui'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { Div, Icon } from '@startupjs/ui'
+import { ui } from 'config'
 import PropTypes from 'prop-types'
 import './index.styl'
 
@@ -13,25 +13,26 @@ const SIZES = {
   l: 32
 }
 
-/* TODO: color icon need fix */
 const Chips = observer(function ({
   title,
-  color = 'primary',
-  size = 'm',
-  iconLeft = {},
-  iconRight = {},
+  color,
+  size,
+  iconLeft,
+  iconRight,
   statusColor,
-  verticalPosition = 'top',
-  horizontalPosition = 'right',
-  isBadge = false,
-  isAttention = false,
-  isDisabled = false,
-  isOutline = false,
+  verticalPosition,
+  horizontalPosition,
+  isBadge,
+  isAttention,
+  isDisabled,
+  isOutline,
   className,
   style,
   children,
   onChange
 }) {
+  if (!title) return null
+
   const partSize = (SIZES[size] || size) / 2
   const _style = {
     ...style,
@@ -42,16 +43,20 @@ const Chips = observer(function ({
     [horizontalPosition]: isBadge ? '-50%' : null
   }
 
+  const getColors = () => {
+    if (isDisabled) return 'disabled'
+    if (isAttention) return 'attention'
+    if (statusColor) return statusColor
+    return color
+  }
+
   const Wrapper = onChange && !isDisabled ? TouchableOpacity : Div
   const Component = () => {
     return pug`
       Wrapper.item(
         styleName=[
-          color,
-          statusColor,
+          getColors(),
           isOutline && 'outline',
-          isAttention && 'attention',
-          isDisabled && 'disabled',
           isBadge && 'badge'
         ]
         className=className
@@ -59,8 +64,8 @@ const Chips = observer(function ({
         style=_style
       )
         if iconLeft.name && !isBadge
-          FontAwesomeIcon(
-            color=isOutline ? 'black' : 'white'
+          Icon(
+            color=isOutline ? ui.colors[getColors()] || color : ui.colors.white
             ...iconLeft
             icon=iconLeft.type ? [iconLeft.type, iconLeft.name] : iconLeft.name
             width=partSize
@@ -78,8 +83,8 @@ const Chips = observer(function ({
           }
         )=title
         if iconRight.name && !isBadge
-          FontAwesomeIcon(
-            color=isOutline ? 'black' : 'white'
+          Icon(
+            color=isOutline ? ui.colors[getColors()] || color : ui.colors.white
             ...iconRight
             icon=iconRight.type ? [iconRight.type, iconRight.name] : iconRight.name
             width=partSize
@@ -110,8 +115,21 @@ const Chips = observer(function ({
   `
 })
 
+Chips.defaultProps = {
+  color: 'primary',
+  size: 'm',
+  iconLeft: {},
+  iconRight: {},
+  verticalPosition: 'top',
+  horizontalPosition: 'right',
+  isBadge: false,
+  isAttention: false,
+  isDisabled: false,
+  isOutline: false
+}
+
 Chips.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   color: PropTypes.oneOf(['primary', 'secondary']),
   size: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(Object.keys(SIZES))]),
   iconLeft: PropTypes.object,

@@ -30,6 +30,11 @@ module.exports = function generateColorsFromPalette (pallete) {
     warningLighter: `rgba(${pallete.yellow}, 0.25)`,
     warningLightest: `rgba(${pallete.yellow}, 0.05)`,
 
+    disabled: `${pallete.gray}`,
+    disabledLight: `rgba(${pallete.gray}, 0.5)`,
+    disabledLighter: `rgba(${pallete.gray}, 0.25)`,
+    disabledLightest: `rgba(${pallete.gray}, 0.05)`,
+
     attention: `${pallete.red}`,
     attentionLight: `rgba(${pallete.red}, 0.5)`,
     attentionLighter: `rgba(${pallete.red}, 0.25)`,

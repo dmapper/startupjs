@@ -1,5 +1,5 @@
 {
-  "white": "#fff",
+  "white": "#FFFFFF",
   "black": "#3E4657",
   "blue": "#2962FF",
   "violet": "#6772E5",
@@ -10,5 +10,6 @@
   "cyan": "#00AED6",
   "purple": "#B200FF",
   "lime": "#A6D800",
-  "ochre": "#F5A623"
+  "ochre": "#F5A623",
+  "gray": "#999999"
 }
