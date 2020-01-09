@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { observer } from 'startupjs'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { TouchableOpacity, Text } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
-import { Collapse, Div } from '@startupjs/ui'
+import { Collapse, Div, Icon } from '@startupjs/ui'
+import { u } from '../../../config/helpers'
 import './index.styl'
+
+const SIZE_ICON = u(2)
+const PADDING_ICON = u(1)
 
 const MenuList = observer(({
   title,
-  icon = {},
+  icon,
   customIcon,
   style,
   className,
   children,
   _isParentIcon,
-  _nested = 1,
+  _nested,
   _listArrowIcon,
   _onRequestActiveList,
   _activeItem,
@@ -33,6 +36,7 @@ const MenuList = observer(({
       setIsResetWhenChange(false)
     }
   }, [_activeItem])
+
   const requestActiveChild = childValue => {
     if (childValue === true || _activeItem === childValue) {
       setHasActiveItem(true)
@@ -55,36 +59,42 @@ const MenuList = observer(({
     })
   })
 
-  const paddingIcon = _isParentIcon ? 16 * (_nested - 1) : 0
+  const nestedPadding = _nested > 1
+    ? SIZE_ICON * (_nested + 1) + PADDING_ICON
+    : SIZE_ICON
+
   return pug`
     Div.root
       TouchableOpacity.caption(
         onPress=()=>setIsOpen(!isOpen)
         style={
-          paddingTop: 8,
-          paddingBottom: 8,
-          paddingLeft: 16 * _nested + paddingIcon
+          paddingLeft: nestedPadding
         }
       )
         if !icon && customIcon
           Div.icon=customIcon
         if icon.name && !customIcon
           Div.icon
-            FontAwesomeIcon(
+            Icon(
               ...icon
-              icon=icon.type ? [icon.type, icon.name] : icon.name
+              size='s'
               color=hasActiveItem ? 'blue' : icon.color
             )
         Text=title
         Div.arrow(style=isOpen ? { transform: [{ rotate: '180deg'}] } : null)
-          FontAwesomeIcon(icon=['fa', 'caret-down'])
+          Icon(type='fa' size='s' name='caret-down')
       Collapse(isShow=isOpen)
         =children
   `
 })
 
+MenuList.defaultProps = {
+  icon: {},
+  _nested: 1
+}
+
 MenuList.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   icon: PropTypes.object,
   customIcon: PropTypes.element
 }

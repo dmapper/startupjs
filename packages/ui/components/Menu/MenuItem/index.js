@@ -1,15 +1,18 @@
 import React from 'react'
 import { observer } from 'startupjs'
 import { TouchableOpacity, Text } from 'react-native'
-import { Div } from '@startupjs/ui'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { Div, Icon } from '@startupjs/ui'
 import PropTypes from 'prop-types'
+import { u } from '../../../config/helpers'
 import './index.styl'
+
+const SIZE_ICON = u(2)
+const PADDING_ICON = u(1)
 
 const MenuItem = observer(({
   title,
-  icon = {},
-  customIcon = null,
+  icon,
+  customIcon,
   value,
   style,
   className,
@@ -23,17 +26,15 @@ const MenuItem = observer(({
 }) => {
   _onRequestActiveList && _onRequestActiveList(value)
 
-  const isActive = _activeItem === value
-  let paddingIcon = _isParentIcon ? 16 * (_nested - 1) : 0
-  paddingIcon += (icon.name || customIcon) && !_isParentIcon ? 16 : 0
+  let nestedPadding = SIZE_ICON * _nested
+  nestedPadding += _isParentIcon && _nested > 0 ? SIZE_ICON : 0
 
+  const isActive = _activeItem === value
   return pug`
     TouchableOpacity.root(
       styleName=isActive ? 'active' : ''
       style={
-        paddingTop: 8,
-        paddingBottom: 8,
-        paddingLeft: 16 * _nested + paddingIcon,
+        paddingLeft: nestedPadding + PADDING_ICON,
         backgroundColor: isActive ? _activeItemBackground : null
       }
       onPress=()=>_onChange(value)
@@ -42,10 +43,10 @@ const MenuItem = observer(({
         Div.icon=customIcon
       if icon.name && !customIcon
         Div.icon
-          FontAwesomeIcon(
-              ...icon
-              icon=icon.type ? [icon.type, icon.name] : icon.name
-              color=isActive ? 'blue' : icon.color
+          Icon(
+            ...icon
+            size='s'
+            color=isActive ? 'blue' : icon.color
           )
       if children
         =children
@@ -54,8 +55,13 @@ const MenuItem = observer(({
   `
 })
 
+MenuItem.defaultProps = {
+  icon: {},
+  customIcon: null
+}
+
 MenuItem.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   value: PropTypes.string,
   icon: PropTypes.object,
   customIcon: PropTypes.element
