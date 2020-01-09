@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'startupjs'
-import { Text, TouchableOpacity } from 'react-native'
+import { Text } from 'react-native'
 import { Div, Icon } from '@startupjs/ui'
 import { ui } from 'config'
 import PropTypes from 'prop-types'
@@ -50,15 +50,11 @@ const Chips = observer(function ({
     return color
   }
 
-  const Wrapper = onChange && !isDisabled ? TouchableOpacity : Div
   const Component = () => {
     return pug`
-      Wrapper.item(
-        styleName=[
-          getColors(),
-          isOutline && 'outline',
-          isBadge && 'badge'
-        ]
+      Div.item(
+        styleName=[getColors(), isOutline && 'outline', isBadge && 'badge']
+        isDisabled=isDisabled
         className=className
         onPress=onChange
         style=_style
@@ -98,20 +94,19 @@ const Chips = observer(function ({
   }
 
   return pug`
-    Div.root
-      if isBadge
-        =children
-        Div.badgeCase(
-          style={
-            [verticalPosition]: 0,
-            [horizontalPosition]: 0,
-            height: SIZES[size],
-            width: SIZES[size]
-          }
-        )
-          Component
-      else
+    if isBadge
+      =children
+      Div.badgeCase(
+        style={
+          [verticalPosition]: 0,
+          [horizontalPosition]: 0,
+          height: SIZES[size],
+          width: SIZES[size]
+        }
+      )
         Component
+    else
+      Component
   `
 })
 
