@@ -1,18 +1,18 @@
 {
   "name": "startupjs",
-  "version": "0.12.0",
+  "version": "1.0.0",
   "description": "React Native + Web + Node.js full-stack framework",
   "main": "index.js",
   "bin": "./cli.js",
   "license": "MIT",
   "dependencies": {
-    "@startupjs/app": "^0.12.0",
-    "@startupjs/backend": "^0.12.0",
-    "@startupjs/bundler": "^0.12.0",
-    "@startupjs/cli": "^0.12.0",
-    "@startupjs/init": "^0.12.0",
-    "@startupjs/orm": "^0.12.0",
-    "@startupjs/react-sharedb": "^0.12.0",
-    "@startupjs/server": "^0.12.0"
+    "@startupjs/app": "^1.0.0",
+    "@startupjs/backend": "^1.0.0",
+    "@startupjs/bundler": "^1.0.0",
+    "@startupjs/cli": "^1.0.0",
+    "@startupjs/init": "^1.0.0",
+    "@startupjs/orm": "^1.0.0",
+    "@startupjs/react-sharedb": "^1.0.0",
+    "@startupjs/server": "^1.0.0"
   }
 }
