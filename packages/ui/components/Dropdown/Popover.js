@@ -8,18 +8,11 @@ const popoverPadding = 7
 const anchorSize = 15
 const anchorHyp = Math.sqrt(anchorSize * anchorSize + anchorSize * anchorSize)
 const anchorOffset = (anchorHyp + anchorSize) / 2 - popoverPadding
-
-function getAnchorOverlayMargin (placement) {
-  switch (placement) {
-    case 'top':
-      return { marginTop: -anchorSize }
-    case 'right':
-      return { marginRight: -anchorSize }
-    case 'bottom':
-      return { marginBottom: -anchorSize }
-    case 'left':
-      return { marginLeft: -anchorSize }
-  }
+const shadowCorrectionPlacementMapping = {
+  top: 'bottom',
+  left: 'right',
+  right: 'left',
+  bottom: 'top'
 }
 
 // left/top placement
@@ -260,6 +253,17 @@ export default class Popover extends React.Component {
       preferredPlacement,
       isRTL
     )
+
+    const actualPlacement = userPlacement === 'auto'
+      ? preferredPlacement
+      : userPlacement
+    const shadowCorrectionPlacement =
+      shadowCorrectionPlacementMapping[actualPlacement]
+
+    const extraStyles = {
+      [shadowCorrectionPlacement]: popoverPadding + anchorSize
+    }
+
     return (
       <Animated.View
         style={[
@@ -271,36 +275,20 @@ export default class Popover extends React.Component {
         pointerEvents='box-none'
       >
         <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            border: '1px solid red',
-            height: '100%',
-            width: '100%',
-            backgroundColor: 'yellow'
-          }}
-        />
-        <View
-          style={[
-            styles.anchor,
-            dynamicAnchorStyle({ placement, offset, isRTL }),
-            {
-              width: anchorStyle.width || anchorSize,
-              height: anchorStyle.height || anchorSize,
-              display: anchorStyle.display || 'flex'
-            },
-            { zIndex: 1000, ...getAnchorOverlayMargin(placement) }
-          ]}
-        />
-        <View
           style={[
             styles.anchor,
             dynamicAnchorStyle({ placement, offset, isRTL }),
             anchorStyle
           ]}
         />
-        <View {...other} style={[styles.options, style, { zIndex: 500 }]}>
+        <View
+          style={[
+            styles.options,
+            styles.optionsShadow,
+            extraStyles
+          ]}
+        />
+        <View {...other} style={[styles.options, style]}>
           {children}
         </View>
       </Animated.View>
@@ -376,6 +364,16 @@ const dynamicAnchorStyle = ({ offset, placement, isRTL }) => {
   }
 }
 
+const shadowStyles = {
+  // Shadow only works on iOS.
+  shadowColor: 'black',
+  shadowOpacity: 0.3,
+  shadowOffset: { width: 0, height: 0 },
+  shadowRadius: 4,
+  // This will elevate the view on Android, causing shadow to be drawn.
+  elevation: 5
+}
+
 export const styles = StyleSheet.create({
   animated: {
     padding: popoverPadding,
@@ -383,25 +381,27 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center'
   },
+  optionsShadow: {
+    position: 'absolute',
+    top: popoverPadding,
+    left: popoverPadding,
+    right: popoverPadding,
+    bottom: popoverPadding,
+    zIndex: -100,
+    ...shadowStyles
+  },
   options: {
     borderRadius: 2,
     minWidth: anchorHyp,
     minHeight: anchorHyp,
-    backgroundColor: 'white',
-
-    // Shadow only works on iOS.
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 3, height: 3 },
-    shadowRadius: 4,
-
-    // This will elevate the view on Android, causing shadow to be drawn.
-    elevation: 5
+    backgroundColor: 'white'
   },
   anchor: {
     width: anchorSize,
     height: anchorSize,
     backgroundColor: 'white',
-    elevation: 5
+    elevation: 5,
+    zIndex: -50,
+    ...shadowStyles
   }
 })

@@ -22,7 +22,7 @@ function Dropdown ({
     Div
       Span Open!
   `,
-  options = [{ label: 'foo' }, { label: 'bar' }],
+  options = [{ label: 'foo' }, { label: 'bar' }, { label: 'baz' }],
   placement,
   children,
   optionsContainerStyle,
@@ -55,51 +55,15 @@ function Dropdown ({
     })
   }
 
-  const containerStyle = {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.22,
-
-    elevation: 3,
-    padding: 16,
-    ...optionsContainerStyle
-  }
-
-  const customStyles = {
-    optionsWrapper: {},
-    optionsContainer: {}
-  }
-
   return pug`
     Menu(
-      ...props
       renderer=Popover
       rendererProps={
-        preferredPlacement: placement,
-        anchorStyle: {
-          display: anchor ? 'flex' : 'none',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1
-          },
-          shadowOpacity: 0.2,
-          shadowRadius: 2.22,
-
-          elevation: 3
-        }
       }
     )
       if trigger
-        MenuTrigger(...triggerProps onPress=ctx.menuActions.openMenu ctx=ctx)= trigger
-      MenuOptions(
-        optionsContainerStyle=containerStyle
-        customStyles=customStyles
-      )
+        MenuTrigger= trigger
+      MenuOptions
         Div
           = getOptions()
           = modifyChildren(children)
