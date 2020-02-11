@@ -1,0 +1,47 @@
+_anchorGutter = -0.5u
+
+.options
+  border-radius 6px
+  background-color white
+  overflow hidden
+
+  +web()
+    overflow auto
+
+.option
+  +web()
+    &:hover
+      background-color #eee
+
+.card
+  radius()
+
+  &.bottom, &.top
+    align-items center
+
+  // &.bottom .anchor
+  //   top _anchorGutter
+
+  // &.top .anchor
+  //   bottom _anchorGutter
+
+  &.left, &.right
+    justify-content center
+
+  // &.left .anchor
+  //   right _anchorGutter
+
+  // &.right .anchor
+  //   left _anchorGutter
+
+.content
+  top 0
+  left 0
+  right 0
+  bottom 0
+  z-index 1
+  background-color $UI.colors.white
+  width 100%
+  height @width
+  padding 2u
+  radius()
