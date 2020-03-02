@@ -27,7 +27,7 @@ function InputWrapper ({
   const [opacityAnimation] = useState(new Animated.Value(1))
 
   const backgroundColor = useMemo(() => {
-    if (!hover && !active && !checked) return
+    if (!hover && !active && !checked && _active) return
     if (_active) return colorToRGBA(color, 0.25)
     if (hover) return colorToRGBA(color, 0.05)
     if (checked) return colorToRGBA(color, 0.25)

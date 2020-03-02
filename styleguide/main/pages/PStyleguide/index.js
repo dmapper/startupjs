@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { observer } from 'startupjs'
 import { Props } from 'components'
 import * as COMPONENTS from 'ui'
@@ -28,7 +28,15 @@ export default observer(function PStyleguide () {
     `
   }
 
+  // ---------------------------------------------------------------------------
+  const [value, setValue] = useState('foo')
+  const [checked, setChecked] = useState()
+  const data = [{ label: 'foo', value: 'foo' }, { label: 'bar', value: 'bar' }]
+  // ---------------------------------------------------------------------------
+
   return pug`
+    COMPONENTS.Radio(data=data value=value onChange=setValue)
+    COMPONENTS.Checkbox(value=checked onChange=setChecked)
     Props.root(
       theme=darkTheme ? 'dark' : undefined
       key=componentName

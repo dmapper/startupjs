@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { TouchableOpacity, Animated, Platform } from 'react-native'
 import { observer, useDidUpdate } from 'startupjs'
 import propTypes from 'prop-types'
-import InputWrapper from '../InputWrapper'
+import SimpleAnimation from '../SimpleAnimation'
 import Div from '../../Div'
 import Span from '../../Span'
 import './index.styl'
@@ -24,40 +24,43 @@ const Input = function ({
   onPress,
   ...props
 }) {
-  const {
-    onMouseEnter,
-    onMouseLeave,
-    onPressIn,
-    onPressOut
-  } = props
-  const [hover, setHover] = useState()
-  const [active, setActive] = useState()
+  // const {
+  //   onMouseEnter,
+  //   onMouseLeave,
+  //   onPressIn,
+  //   onPressOut
+  // } = props
+  // const [hover, setHover] = useState()
+  // const [active, setActive] = useState()
   const handlers = {
-    onPressIn: (...args) => {
-      setActive(true)
-      onPressIn && onPressIn(...args)
-    },
-    onPressOut: (...args) => {
-      setActive()
-      onPressOut && onPressOut(...args)
-    }
+    // onPressIn: (...args) => {
+    //   setActive(true)
+    //   onPressIn && onPressIn(...args)
+    // },
+    // onPressOut: (...args) => {
+    //   setActive()
+    //   onPressOut && onPressOut(...args)
+    // }
   }
   const circleHandlers = { ...handlers }
 
   if (isWeb) {
-    circleHandlers.onMouseEnter = (...args) => {
-      setHover(true)
-      onMouseEnter && onMouseEnter(...args)
-    }
-    circleHandlers.onMouseLeave = (...args) => {
-      setHover()
-      onMouseLeave && onMouseLeave(...args)
-    }
+    // circleHandlers.onMouseEnter = (...args) => {
+    //   setHover(true)
+    //   onMouseEnter && onMouseEnter(...args)
+    // }
+    // circleHandlers.onMouseLeave = (...args) => {
+    //   setHover()
+    //   onMouseLeave && onMouseLeave(...args)
+    // }
   }
 
   const [checkedSize] = useState(new Animated.Value(checked ? 1 : MIN_SCALE_RATIO))
 
+  const animationRef = useRef()
   const setChecked = () => {
+    // animationRef.current.animate()
+    SimpleAnimation.animate()
     onPress && onPress(value)
   }
 
@@ -92,13 +95,7 @@ const Input = function ({
       accessible=false
       ...handlers
     )
-      InputWrapper.wrapper(
-        styleName={ 'with-label': !!label }
-        hover=hover
-        active=active
-        checked=checked
-        color=color
-      )
+      SimpleAnimation(ref=animationRef color=color)
         TouchableOpacity.circle(
           style={borderColor: color}
           activeOpacity=1

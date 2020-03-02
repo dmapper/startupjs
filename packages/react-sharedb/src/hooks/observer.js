@@ -98,7 +98,7 @@ function wrapObserverMeta (Component, suspenseProps = DEFAULT_SUSPENSE_PROPS) {
     )
   }
   pipeComponentMeta(Component, ObserverWrapper, 'Observer', 'StartupjsWrapperObserver')
-  return ObserverWrapper
+  return React.forwardRef(ObserverWrapper)
 }
 
 function wrapBaseComponent (baseComponent, blockUpdate) {
