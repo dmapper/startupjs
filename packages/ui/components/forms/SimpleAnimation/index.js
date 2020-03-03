@@ -19,24 +19,38 @@ function Animation (props, ref) {
   const animationRef = useRef()
   const [scaleAnimation] = useState(new Animated.Value(MIN_SCALE_RATIO))
   const [opacityAnimation] = useState(new Animated.Value(DEFAULT_BG_OPACITY))
-  useImperativeHandle(ref, () => ({
-    animate: () => {
-      Animated.timing(
+  useImperativeHandle(props.forwardedRef, () => ({
+    animate: (props = {}) => {
+      const {
+        type = 'timing',
+        minScale,
+        maxScale,
+        minOpacity
+      } = props
+
+      const toScale = typeof maxScale === 'undefined'
+        ? MAX_SCALE_RATIO
+        : maxScale
+      const toOpacity = typeof minOpacity === 'undefined'
+        ? DEFAULT_BG_OPACITY
+        : minOpacity
+
+      Animated[type](
         scaleAnimation,
         {
-          toValue: MAX_SCALE_RATIO,
+          toValue: toScale,
           duration: SCALE_TIMING
         }
       ).start(() => {
         Animated.timing(
           opacityAnimation,
           {
-            toValue: 0,
+            toValue: toOpacity,
             duration: FADE_TIMING
           }
         ).start(() => {
-          scaleAnimation.setValue(MIN_SCALE_RATIO)
-          opacityAnimation.setValue(DEFAULT_BG_OPACITY)
+          scaleAnimation.setValue(minScale || MIN_SCALE_RATIO)
+          opacityAnimation.setValue(toOpacity)
         })
       })
     }
@@ -44,7 +58,6 @@ function Animation (props, ref) {
 
   return pug`
     View.root(
-      activeOpacity=1
       ref=animationRef
       ...props
     )
@@ -61,11 +74,7 @@ function Animation (props, ref) {
         = props.children
   `
 }
-const SimpleAnimation = forwardRef(Animation)
-export default observer(({ ...props }) => {
-  const ref = useRef()
-  console.log(this)
-  return pug`
-    SimpleAnimation(...props ref=ref)
-  `
-})
+
+const SimpleAnimation = forwardRef(observer(Animation))
+
+export default SimpleAnimation

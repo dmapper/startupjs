@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { TouchableOpacity, Animated, Platform } from 'react-native'
+import { TouchableOpacity, Animated } from 'react-native'
 import { observer, useDidUpdate } from 'startupjs'
 import propTypes from 'prop-types'
 import SimpleAnimation from '../SimpleAnimation'
@@ -7,7 +7,6 @@ import Div from '../../Div'
 import Span from '../../Span'
 import './index.styl'
 
-const isWeb = Platform.OS === 'web'
 const ANIMATION_TIMING = 120
 
 // 0.01 because on android animations does not work with value 0
@@ -24,43 +23,11 @@ const Input = function ({
   onPress,
   ...props
 }) {
-  // const {
-  //   onMouseEnter,
-  //   onMouseLeave,
-  //   onPressIn,
-  //   onPressOut
-  // } = props
-  // const [hover, setHover] = useState()
-  // const [active, setActive] = useState()
-  const handlers = {
-    // onPressIn: (...args) => {
-    //   setActive(true)
-    //   onPressIn && onPressIn(...args)
-    // },
-    // onPressOut: (...args) => {
-    //   setActive()
-    //   onPressOut && onPressOut(...args)
-    // }
-  }
-  const circleHandlers = { ...handlers }
-
-  if (isWeb) {
-    // circleHandlers.onMouseEnter = (...args) => {
-    //   setHover(true)
-    //   onMouseEnter && onMouseEnter(...args)
-    // }
-    // circleHandlers.onMouseLeave = (...args) => {
-    //   setHover()
-    //   onMouseLeave && onMouseLeave(...args)
-    // }
-  }
-
   const [checkedSize] = useState(new Animated.Value(checked ? 1 : MIN_SCALE_RATIO))
 
   const animationRef = useRef()
   const setChecked = () => {
-    // animationRef.current.animate()
-    SimpleAnimation.animate()
+    animationRef.current.animate()
     onPress && onPress(value)
   }
 
@@ -92,24 +59,29 @@ const Input = function ({
     Div.root(
       interactive=false
       onPress=setChecked
-      accessible=false
-      ...handlers
     )
-      SimpleAnimation(ref=animationRef color=color)
-        TouchableOpacity.circle(
-          style={borderColor: color}
-          activeOpacity=1
-          onPress=setChecked
-          ...circleHandlers
+      SimpleAnimation(
+        forwardedRef=animationRef
+        color=color
+      )
+        SimpleAnimation(
+          forwardedRef=animationRef
+          color=color
         )
-          Animated.View.checked(
-            style={
-              backgroundColor: color,
-              transform: [{
-                scale: checkedSize
-              }]
-            }
+          TouchableOpacity.circle(
+            style={borderColor: color}
+            activeOpacity=1
+            onMouseEnter=() => animationRef.current.animate({ minOpacity: 0.05, minScale: 1 })
+            onPress=setChecked
           )
+            Animated.View.checked(
+              style={
+                backgroundColor: color,
+                transform: [{
+                  scale: checkedSize
+                }]
+              }
+            )
       Span.label(style={color: textColor})= label
   `
 }
